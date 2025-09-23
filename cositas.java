@@ -17,31 +17,32 @@ public class cositas {
         System.out.println(letras);
     }
 
+
     public void get_traslaciones(int j){
         int i=0;
-        while(i<traslaciones.size()){
+
+       /*  while(i<traslaciones.size()){
 
             System.out.println("Traslacion "+i);
             if(j==1){
                 traslaciones.get(i).imprimir();
             }else{
-                traslaciones.get(i).imprimir_con_codigo();
+                ArrayList<Nodo> nodos = new ArrayList<>();
+                imprimir_good(traslaciones.get(i).primer,nodos);
             }
             
             i++;
-        }
+        }*/
     }
 
 
 
     public AFND desarmar(String ER){
-        //guardar palabras
-        //ArrayList<Character> palabras = new ArrayList<>();
 
         
         AFND fin =new AFND();
 
-        if(ER.indexOf('|')!=-1){
+        if(ER.indexOf('|')!=-1){ 
             disyun(ER);
         }else{
             if(ER.indexOf('*')!=-1){
@@ -147,4 +148,37 @@ public class cositas {
        // traslaciones.add(fin);
     }
   
+
+    public void imprimir_good(Nodo actual,ArrayList<Nodo> nodos){
+        
+        if(actual.nodo_sig1!=null){
+            Nodo nuevo=actual;
+            System.out.println("actual "+ nuevo);
+            System.out.println("dirigido 1 "+ nuevo.nodo_sig1);
+            System.out.println("mensaje "+ nuevo.mensaje);
+            nuevo=nuevo.nodo_sig1;
+                
+            if(!nodos.contains(nuevo)){
+                nodos.add(nuevo);
+                imprimir_good(nuevo,nodos);
+                    
+            }
+                
+                
+        }
+        System.out.println("/////////////////////////////////");
+        if(actual.nodo_sig2!=null){
+            Nodo nuevo=actual;
+            System.out.println("actual "+ nuevo);
+            System.out.println("dirigido 2 "+ nuevo.nodo_sig2);
+            System.out.println("mensaje "+ nuevo.mensaje2);
+            nuevo=nuevo.nodo_sig2;
+                
+            if(!nodos.contains(nuevo)){
+                nodos.add(nuevo);
+                imprimir_good(nuevo,nodos);
+                    
+            }
+        }
+    }
 }

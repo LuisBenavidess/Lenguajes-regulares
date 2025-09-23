@@ -15,7 +15,7 @@ public class Disyuncion {
         Nodo inicio=fin.fusion_salida_1(b, 2);
         
         
-        fin.Agregar2('e', inicio, fi);
+        fin.Agregar2('e', inicio, fi,1);
         
       /*   Nodo nuevo=fin.primer;
         while(nuevo.nodo_sig2!=null){

@@ -12,21 +12,23 @@ public class Nodo {
 
     //Mensaje que transmite
     char mensaje;
-
+    char mensaje2;
     int numero;
 
 
     //Constructor 
-    public Nodo(char pal){
+    public Nodo(){
         nodo_sig1=null;
         nodo_sig2=null;
+        
+    }
+
+    public void agregar1(char pal){
         mensaje=pal;
     }
-
-    //Set
-    public void agregar_numero(int numero){
-        this.numero=numero;
+    public void agregar2(char pal){
+        mensaje2=pal;
     }
-
+    
 
 }
