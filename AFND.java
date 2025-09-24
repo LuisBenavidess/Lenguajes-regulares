@@ -127,9 +127,18 @@ public class AFND {
         
     }
 
-    
+    public void Agregar_nodo(Nodo nodo){
 
-
+        if(nodo==null){
+            primer=nodo;
+        }else{
+            Nodo ahora=primer;
+            while(ahora.nodo_sig1!=null){
+                ahora=ahora.nodo_sig1;
+            }
+            ahora.nodo_sig1=nodo;
+        }
+    }
 
 
     public void imprimir_con_codigo(){

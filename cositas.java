@@ -34,7 +34,7 @@ public class cositas {
                 fin= clausura_k(ER);
             }else{
                 if(ER.indexOf('.')!=-1){
-                    fin=concatenacion(ER);
+                   // fin=concatenacion(ER);
                 }else{
                     
                     fin.Agregar(ER.charAt(0), 1);
@@ -53,32 +53,144 @@ public class cositas {
 
     }
 
-
-    
-    public AFND concatenacion(String ER){
+    public AFND mapeo(String ER){
+        AFND fin=new AFND();
         int i=0;
-        AFND fin = new AFND();
         while(i<ER.length()){
             if(ER.charAt(i)=='.'){
-                AFND concatenacion =new AFND();
-                Cocate coca=new Cocate();
-                if(fin.primer==null){
-                    concatenacion = coca.crear(ER.charAt(i-1),ER.charAt(i+1));
-                    
-                    
-                }else{
-                    
-                    concatenacion = coca.crear(ER.charAt(i+1));
-                }
                
-                fin.fusion_salida_1(concatenacion,1);
+                ArrayList<String> palabra = separador(ER, i, '.');
+                String parte1=" ";
+                String parte2=" ";
+                System.out.println(palabra);
+                if(palabra.get(0).indexOf('(')!=-1){
+                    parte1=parentesis(palabra.get(0));
+                }else{
+                    parte1=palabra.get(0);
+                }
+                if(palabra.get(1).indexOf('(')!=-1){
+                    parte2=parentesis(palabra.get(1));
+                }else{
+                    parte2=palabra.get(1);
+                }
+                
+                fin=concatenacion(parte1,parte2);
+
+                
+                //fin=concatenacion(palabra);
+            }else{
+                if(ER.charAt(i)=='|'){
+                    
+                }
             }
-            
             i++;
         }
-        traslaciones.add(fin);
         return fin;
     }
+
+    public ArrayList<String> separador(String ER, int i,char operacion){
+        
+        if(operacion=='.'){
+            char let1=ER.charAt(i+1);
+            String izquierdo;
+            if (ER.charAt(i - 1) == ')') {
+                int balance = 1;
+                int j = i - 2;
+                while (j >= 0 && balance > 0) {
+                    if (ER.charAt(j) == ')') balance++;
+                    else if (ER.charAt(j) == '(') balance--;
+                    j--;
+                }
+                izquierdo = ER.substring(j + 1, i); // incluye paréntesis
+            } else {
+                izquierdo = String.valueOf(ER.charAt(i - 1));
+            }
+
+            // --- Buscar operando derecho ---
+            String derecho;
+            if (ER.charAt(i + 1) == '(') {
+                int balance = 1;
+                int j = i + 2;
+                while (j < ER.length() && balance > 0) {
+                    if (ER.charAt(j) == '(') balance++;
+                    else if (ER.charAt(j) == ')') balance--;
+                    j++;
+                }
+                derecho = ER.substring(i + 1, j); // incluye paréntesis
+            } else {
+                derecho = String.valueOf(ER.charAt(i + 1));
+            }
+            ArrayList<String> palabras = new ArrayList<>();
+            palabras.add(izquierdo);
+            palabras.add(derecho); 
+            return palabras;
+            
+        }else{
+            if(operacion=='('){
+                
+            }
+        }
+        return null;
+    }
+
+    public String parentesis(String ER){
+        int inicio = ER.indexOf('(');
+        int balance = 1;
+        int i = inicio + 1;
+
+        while (i < ER.length() && balance > 0) {
+            if (ER.charAt(i) == '(') balance++;
+            else if (ER.charAt(i) == ')') balance--;
+            i++;
+        }
+
+        if (balance != 0) {
+            throw new IllegalArgumentException("Paréntesis desbalanceados en la expresión.");
+        }
+
+        // substring desde después de '(' hasta antes de ')'
+        return ER.substring(inicio + 1, i - 1); 
+    }
+
+
+    
+    public AFND concatenacion(String ER,String ER2){
+        AFND fin = new AFND();
+        
+        Cocate coca=new Cocate();
+
+        AFND parte1;
+        AFND parte2;
+
+        
+        if(ER.length()==1 && ER2.length()==1){
+            
+            fin = coca.crear(ER.charAt(0), ER2.charAt(0));
+        }else{
+            if(ER.length()>=2){
+                parte1 = mapeo(ER);
+                if(ER2.length()>=2){
+                    parte2 = mapeo(ER2);
+                    fin=coca.crear(parte1.primer, parte2.primer);
+                }else{
+                    
+                    fin=coca.crear(parte1,ER2.charAt(0));
+                }
+            }else{
+                
+                if(ER2.length()>=2){
+                    
+                    parte2 = mapeo(ER2);
+
+                    fin=coca.crear(ER.charAt(0),parte2);
+                }
+            }
+        }                                                               
+        
+               
+        return fin;
+    }
+            
 
     public AFND clausura_k(String ER){
         //metodo para que saque solo lo de la clausura 
@@ -126,6 +238,7 @@ public class cositas {
 
     public void imprimir_good(Nodo actual,ArrayList<Nodo> nodos){
         enumerar(actual, 0);
+        
         if(actual.nodo_sig1!=null){
             Nodo nuevo=actual;
             System.out.println("actual "+ nuevo.numero);
