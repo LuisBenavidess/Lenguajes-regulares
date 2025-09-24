@@ -1,4 +1,12 @@
 //Utilizaremos listas enlazadas para imitar los nodos del AFND
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+
 public class AFND {
     Nodo primer;
     
@@ -63,7 +71,7 @@ public class AFND {
     //Metodo agregar en uno especifico  con un nodo inicial y final definidos  crear2(poscion, mensaje)
     public void Agregar2(char let,Nodo Nodo_i,Nodo Nodo_f,int num){
         //siendo la opcion uno para juntar al final y la opcion 2 es para bucles
-        if(num==1){
+        if(num==1){  
             Nodo_i.nodo_sig2=Nodo_f;
         }else{
             Nodo_f.nodo_sig2=Nodo_i;
@@ -78,19 +86,22 @@ public class AFND {
 
         Nodo nuevo = new Nodo();
         Nodo ahora = primer;
-        
+        nuevo.mensaje='f';
+        nuevo.mensaje2='f';
         if(opcion==1){
             while(ahora.nodo_sig1!=null){
                 ahora=ahora.nodo_sig1;
             }
             ahora.nodo_sig1=nuevo;
+            return ahora.nodo_sig1;
         }else{
             while(ahora.nodo_sig2!=null){
                 ahora=ahora.nodo_sig2;
             }
             ahora.nodo_sig2=nuevo;
+            return ahora.nodo_sig2;
         }
-        return nuevo;
+        
     }
 
     // otro que tenga la opcion 2 salidad para cuando disyuncion 
@@ -119,7 +130,7 @@ public class AFND {
                     ahora=ahora.nodo_sig2;
 
                 }
-                ahora.nodo_sig2=nodos.primer;
+                ahora.nodo_sig2=nodos.primer; 
             }
         }
         return nodos.primer;
@@ -141,30 +152,191 @@ public class AFND {
     }
 
 
-    public void imprimir_con_codigo(){
-        Nodo actual=primer;
-        while(actual!=null){
-            System.out.println("actual "+actual);
-            if(actual.nodo_sig1!=null){
-                System.out.println("dirigido "+actual.nodo_sig1);
+     public ArrayList<Nodo> getFinales() {
+        ArrayList<Nodo> finales = new ArrayList<>();
+        if (primer == null) return finales;
+
+        Set<Nodo> visitados = new HashSet<>();
+        Queue<Nodo> cola = new LinkedList<>();
+        cola.add(primer);
+        visitados.add(primer);
+
+        while (!cola.isEmpty()) {
+            Nodo ahora = cola.poll();
+
+            if (ahora.mensaje == 'f' || ahora.mensaje2 == 'f') {
+                finales.add(ahora);
             }
-            System.out.println(actual.mensaje+" >>> ");
-            actual=actual.nodo_sig1;
+
+            if (ahora.nodo_sig1 != null && !visitados.contains(ahora.nodo_sig1)) {
+                visitados.add(ahora.nodo_sig1);
+                cola.add(ahora.nodo_sig1);
+            }
+            if (ahora.nodo_sig2 != null && !visitados.contains(ahora.nodo_sig2)) {
+                visitados.add(ahora.nodo_sig2);
+                cola.add(ahora.nodo_sig2);
+            }
         }
 
-        actual=primer;
-        System.out.println(" ");
-        System.out.println("///////////////////");
-        while(actual!=null){
-            System.out.println("actual "+actual);
-            if(actual.nodo_sig2!=null){
-                System.out.println("dirigido "+actual.nodo_sig2);
-            }
-            System.out.println(actual.mensaje+" >>> ");
-            actual=actual.nodo_sig2;
-        }
-        //System.out.println("null");
+        return finales;
     }
+
+     public void imprimir() {
+
+        if (primer == null) {
+            System.out.println("AFND vacío.");
+            return;
+        }
+
+        // Usamos un Set para evitar imprimir nodos repetidos
+        Set<Nodo> visitados = new HashSet<>();
+        Queue<Nodo> cola = new LinkedList<>();
+
+        primer.numero = 0; // numeramos el inicial
+        cola.add(primer);
+        visitados.add(primer);
+
+        int contador = 1;
+
+        System.out.println("=== Estados y transiciones del AFND ===");
+
+        while (!cola.isEmpty()) {
+            Nodo actual = cola.poll();
+
+            System.out.print("Estado " + actual.numero);
+
+            // Marcar estado final
+            if (actual.mensaje == 'f' && actual.mensaje2 == 'f') {
+                System.out.print(" (FINAL)");
+            }
+            System.out.println();
+
+            // Transición 1
+            if (actual.nodo_sig1 != null) {
+                if (actual.nodo_sig1.numero == -1) {
+                    actual.nodo_sig1.numero = contador++;
+                }
+                System.out.println("  --" + actual.mensaje + "--> Estado " + actual.nodo_sig1.numero);
+
+                if (!visitados.contains(actual.nodo_sig1)) {
+                    visitados.add(actual.nodo_sig1);
+                    cola.add(actual.nodo_sig1);
+                }
+            }
+
+            // Transición 2
+            if (actual.nodo_sig2 != null) {
+                if (actual.nodo_sig2.numero == -1) {
+                    actual.nodo_sig2.numero = contador++;
+                }
+                System.out.println("  --" + actual.mensaje2 + "--> Estado " + actual.nodo_sig2.numero);
+
+                if (!visitados.contains(actual.nodo_sig2)) {
+                    visitados.add(actual.nodo_sig2);
+                    cola.add(actual.nodo_sig2);
+                }
+            }
+        }
+        System.out.println("======================================");
+    }
+    
+
+    public void imprimirFormal() {
+    if (primer == null) {
+        System.out.println("AFND vacío.");
+        return;
+    }
+
+    List<Nodo> nodos = new ArrayList<>();
+    List<String> nombres = new ArrayList<>();
+    List<String> estadosFinales = new ArrayList<>();
+    List<String> delta = new ArrayList<>();
+    List<String> sigma = new ArrayList<>();
+
+    Queue<Nodo> cola = new LinkedList<>();
+    Set<Nodo> visitados = new HashSet<>();
+
+    cola.add(primer);
+    visitados.add(primer);
+    nodos.add(primer);
+    nombres.add("q0");
+
+    int contador = 1;
+
+    while (!cola.isEmpty()) {
+        Nodo actual = cola.poll();
+        int idxActual = nodos.indexOf(actual);
+        String nombreActual = nombres.get(idxActual);
+
+        // nodo_sig1
+        if (actual.nodo_sig1 != null) {
+            Nodo sig = actual.nodo_sig1;
+            int idx = nodos.indexOf(sig);
+            if (idx == -1) {
+                nodos.add(sig);
+                nombres.add("q" + contador);
+                idx = contador;
+                contador++;
+            }
+            String nombreSig = nombres.get(idx);
+            char simbolo = actual.mensaje == '-' ? '_' : actual.mensaje;
+            if (actual.mensaje != '-' && actual.mensaje != 'f' && !sigma.contains(String.valueOf(simbolo))) {
+                sigma.add(String.valueOf(simbolo));
+            }
+            delta.add("(" + nombreActual + "," + simbolo + "," + nombreSig + ")");
+            if (!visitados.contains(sig)) {
+                cola.add(sig);
+                visitados.add(sig);
+            }
+        }
+
+        // nodo_sig2
+        if (actual.nodo_sig2 != null) {
+            Nodo sig = actual.nodo_sig2;
+            int idx = nodos.indexOf(sig);
+            if (idx == -1) {
+                nodos.add(sig);
+                nombres.add("q" + contador);
+                idx = contador;
+                contador++;
+            }
+            String nombreSig = nombres.get(idx);
+            char simbolo = actual.mensaje2 == '-' ? '_' : actual.mensaje2;
+            if (actual.mensaje2 != '-' && actual.mensaje2 != 'f' && !sigma.contains(String.valueOf(simbolo))) {
+                sigma.add(String.valueOf(simbolo));
+            }
+            delta.add("(" + nombreActual + "," + simbolo + "," + nombreSig + ")");
+            if (!visitados.contains(sig)) {
+                cola.add(sig);
+                visitados.add(sig);
+            }
+        }
+
+        // finales
+        if (actual.mensaje == 'f' || actual.mensaje2 == 'f') {
+            estadosFinales.add(nombreActual);
+        }
+    }
+
+    // K
+    String K = "{" + String.join(",", nombres) + "}";
+    // Sigma
+    String Sigma = "{" + String.join(",", sigma) + "}";
+    // Delta
+    String Delta = "{" + String.join(",", delta) + "}";
+    // s
+    String s = "q0";
+    // F
+    String F = "{" + String.join(",", estadosFinales) + "}";
+
+    System.out.println("AFND M:");
+    System.out.println("K=" + K);
+    System.out.println("Sigma=" + Sigma);
+    System.out.println("Delta=" + Delta);
+    System.out.println("s=" + s);
+    System.out.println("F=" + F);
+}
+
 
     
 }

@@ -2,9 +2,6 @@
 public class Nodo {
     //atributos
 
-    //Nodos anteriores
-    Nodo nodo_ant1;
-    Nodo nodo_ant2;
 
     //Nodos siguientes
     Nodo nodo_sig1;

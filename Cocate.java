@@ -1,59 +1,23 @@
+import java.util.ArrayList;
+
 public class Cocate {
-    
-    public AFND crear(char a, char b){
-        AFND coca = new AFND();
-        coca.Agregar(a,1);
-        coca.Agregar('-',1);
-        coca.Agregar(b,1);
-        coca.agregar_fin(1);
-        return coca;
-    }
-     public AFND crear(char b){
-        AFND coca = new AFND();
-        coca.Agregar('-',1);
-        coca.Agregar(b,1);
-        coca.agregar_fin(1);
-        return coca;
-    }
-    public AFND crear(Nodo nodo1, Nodo nodo2){
-        AFND fin = new AFND();
-        fin.Agregar_nodo(nodo1);
-        fin.Agregar('-', 1);
-        fin.Agregar_nodo(nodo2);
 
-        return fin;
-    }
-    public AFND crear(AFND afnd,char a){
+    public AFND crear(AFND afnd1, AFND afnd2) {
+        AFND resultado = new AFND();
 
-        AFND fin = new AFND();
-        fin.Agregar_nodo(afnd.primer);
-        fin.Agregar('-', 1);
-        fin.Agregar(a, 1);
+        if (afnd1 == null || afnd1.primer == null) return afnd2;
+        if (afnd2 == null || afnd2.primer == null) return afnd1;
 
-        return fin; 
+        ArrayList<Nodo> finales = afnd1.getFinales();
+        for (Nodo f : finales) {
+            // Desmarcar final y poner epsilon hacia afnd2.primer
+            if (f.mensaje == 'f') f.mensaje = '-';
+            if (f.mensaje2 == 'f') f.mensaje2 = '-';
 
-    }
-    public AFND crear(char a,AFND afnd){
+            f.nodo_sig1 = afnd2.primer;
+        }
 
-        AFND fin = new AFND();
-        fin.Agregar(a, 1);
-        fin.Agregar('-', 1);
-        fin.Agregar_nodo(afnd.primer);
-        
-
-        return fin; 
-
-    }
-    public AFND crear(AFND afnd1, AFND afnd2){
-
-        AFND fin = new AFND();
-        
-        fin.Agregar_nodo(afnd1.primer);
-        fin.Agregar('-', 1);
-        fin.Agregar_nodo(afnd2.primer);
-        
-
-        return fin; 
-
+        resultado.primer = afnd1.primer;
+        return resultado;
     }
 }
