@@ -35,6 +35,7 @@ public class AFND {
             }
         }else{
             nuevo.agregar2(let);
+            
             if(primer==null){
 
              primer=nuevo;
@@ -53,7 +54,7 @@ public class AFND {
             }
         }
         
-        
+    
         return nuevo;
     }
 
@@ -67,8 +68,8 @@ public class AFND {
         }else{
             Nodo_f.nodo_sig2=Nodo_i;
         }
-        
-        Nodo_f.mensaje2='-';
+        Nodo_i.mensaje2=let;
+        Nodo_f.mensaje='-';
        
 
     }
@@ -77,7 +78,7 @@ public class AFND {
 
         Nodo nuevo = new Nodo();
         Nodo ahora = primer;
-
+        
         if(opcion==1){
             while(ahora.nodo_sig1!=null){
                 ahora=ahora.nodo_sig1;
@@ -106,12 +107,17 @@ public class AFND {
                 ahora.nodo_sig1=nodos.primer;
             }
         }else{
+            
             if(primer==null){
+                
                 primer=nodos.primer;
             }else{
+                
                 Nodo ahora=primer;
                 while (ahora.nodo_sig2!=null) {
+                   
                     ahora=ahora.nodo_sig2;
+
                 }
                 ahora.nodo_sig2=nodos.primer;
             }
@@ -123,24 +129,7 @@ public class AFND {
 
     
 
-    public void imprimir(){
-        /*Nodo actual=primer;
-        while(actual!=null){
-            
-            System.out.print(actual.mensaje+" >>> ");
-            actual=actual.nodo_sig1;
-        }
 
-        actual=primer;
-        System.out.println(" ");
-        System.out.println("///////////////////");
-        while(actual!=null){
-           
-            System.out.print(actual.mensaje+" >>> ");
-            actual=actual.nodo_sig2;
-        }*/
-        //System.out.println("null");
-    }
 
 
     public void imprimir_con_codigo(){

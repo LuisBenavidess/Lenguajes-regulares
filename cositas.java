@@ -5,11 +5,13 @@ public class cositas {
     //Atributos
     public ArrayList<Character> letras;
     public ArrayList<AFND> traslaciones; //cambiar a clase nodo
+    public int can_estados;
 
     //Constructos 
     public cositas(){
         letras= new ArrayList<>();
         traslaciones= new ArrayList<>(); // cambiar clase nodo
+    
     }
 
     //Metodos
@@ -18,42 +20,25 @@ public class cositas {
     }
 
 
-    public void get_traslaciones(int j){
-        int i=0;
-
-       /*  while(i<traslaciones.size()){
-
-            System.out.println("Traslacion "+i);
-            if(j==1){
-                traslaciones.get(i).imprimir();
-            }else{
-                ArrayList<Nodo> nodos = new ArrayList<>();
-                imprimir_good(traslaciones.get(i).primer,nodos);
-            }
-            
-            i++;
-        }*/
-    }
-
 
 
     public AFND desarmar(String ER){
 
         
         AFND fin =new AFND();
-
+       
         if(ER.indexOf('|')!=-1){ 
-            disyun(ER);
+           fin= disyun(ER);
         }else{
             if(ER.indexOf('*')!=-1){
                 fin= clausura_k(ER);
             }else{
                 if(ER.indexOf('.')!=-1){
-                    concatenacion(ER);
+                    fin=concatenacion(ER);
                 }else{
                     
                     fin.Agregar(ER.charAt(0), 1);
-                    traslaciones.add(fin);
+                    //traslaciones.add(fin);
                 }
             }
         }
@@ -69,12 +54,6 @@ public class cositas {
     }
 
 
-    public boolean validar_pal(char pal){
-        if(pal=='.' || pal=='|' || pal=='*'|| pal=='('|| pal==')'){
-            return false;
-        }
-        return true;
-    }
     
     public AFND concatenacion(String ER){
         int i=0;
@@ -84,10 +63,11 @@ public class cositas {
                 AFND concatenacion =new AFND();
                 Cocate coca=new Cocate();
                 if(fin.primer==null){
-                    
                     concatenacion = coca.crear(ER.charAt(i-1),ER.charAt(i+1));
                     
+                    
                 }else{
+                    
                     concatenacion = coca.crear(ER.charAt(i+1));
                 }
                
@@ -116,7 +96,7 @@ public class cositas {
         return fin;
     }
 
-    public void disyun(String ER){
+    public AFND disyun(String ER){
         // falta un metodo para asegurarse de que una disyuncion que no tenga paretesis :)tu puedes luis del futuro y martin del futuro
         // hacer un mapeo de todo y buscar parentesis y todo lo que este dentro no se pesca :)
         AFND fin = new AFND();
@@ -129,36 +109,32 @@ public class cositas {
                
                 AFND mitad1=desarmar(primeraMitad);
                 
-               // Nodo nuevo= mitad1.primer;
-                
-                /*while(nuevo.nodo_sig2!=null){
-                    System.out.println(nuevo.mensaje);
-                    nuevo=nuevo.nodo_sig2;
-                }
-                System.out.println(nuevo.mensaje);*/
-                
                 AFND mitad2=desarmar(segundaMitad);
                 
+                
+
                 Disyuncion disyu = new Disyuncion();
                 fin = disyu.crear(mitad1, mitad2);
 
             }
             i++;
         }
-       // traslaciones.add(fin);
+        return fin;
+       
     }
   
 
     public void imprimir_good(Nodo actual,ArrayList<Nodo> nodos){
-        
+        enumerar(actual, 0);
         if(actual.nodo_sig1!=null){
             Nodo nuevo=actual;
-            System.out.println("actual "+ nuevo);
-            System.out.println("dirigido 1 "+ nuevo.nodo_sig1);
+            System.out.println("actual "+ nuevo.numero);
+            System.out.println("dirigido 1 "+ nuevo.nodo_sig1.numero);
             System.out.println("mensaje "+ nuevo.mensaje);
             nuevo=nuevo.nodo_sig1;
                 
             if(!nodos.contains(nuevo)){
+                
                 nodos.add(nuevo);
                 imprimir_good(nuevo,nodos);
                     
@@ -168,10 +144,19 @@ public class cositas {
         }
         System.out.println("/////////////////////////////////");
         if(actual.nodo_sig2!=null){
+ 
             Nodo nuevo=actual;
-            System.out.println("actual "+ nuevo);
-            System.out.println("dirigido 2 "+ nuevo.nodo_sig2);
-            System.out.println("mensaje "+ nuevo.mensaje2);
+            System.out.println("actual "+ nuevo.numero);
+            
+            System.out.println("dirigido 2 "+ nuevo.nodo_sig2.numero);
+           
+            if(nuevo.mensaje2==' '){
+                
+                System.out.println("mensaje "+ nuevo.mensaje);
+            }else{
+                System.out.println("mensaje "+ nuevo.mensaje2);                                       
+            }
+            
             nuevo=nuevo.nodo_sig2;
                 
             if(!nodos.contains(nuevo)){
@@ -181,4 +166,18 @@ public class cositas {
             }
         }
     }
+
+    public int enumerar(Nodo nodo, int i) {
+        if (nodo == null) return i;
+        if (nodo.numero != -1) return i; 
+
+        nodo.numero = i++;
+        if (nodo.nodo_sig1 != null) {
+            i = enumerar(nodo.nodo_sig1, i);
+        }
+        if (nodo.nodo_sig2 != null) {
+            i = enumerar(nodo.nodo_sig2, i);
+        }
+        return i;
+}
 }

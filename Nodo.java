@@ -20,6 +20,9 @@ public class Nodo {
     public Nodo(){
         nodo_sig1=null;
         nodo_sig2=null;
+        mensaje=' ';
+        mensaje2=' ';
+        numero=-1;
         
     }
 

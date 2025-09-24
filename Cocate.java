@@ -5,12 +5,14 @@ public class Cocate {
         coca.Agregar(a,1);
         coca.Agregar('-',1);
         coca.Agregar(b,1);
+        coca.agregar_fin(1);
         return coca;
     }
      public AFND crear(char b){
         AFND coca = new AFND();
         coca.Agregar('-',1);
         coca.Agregar(b,1);
+        coca.agregar_fin(1);
         return coca;
     }
 }
