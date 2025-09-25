@@ -1,7 +1,7 @@
 import java.util.ArrayList;
-
+// Clase que creará las disyunciones atraves de 2 AFND
 public class Disyuncion {
-
+ 
     public AFND crear(AFND afnd1, AFND afnd2) {
         AFND resultado = new AFND();
 

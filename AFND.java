@@ -13,7 +13,7 @@ public class AFND {
     public AFND(){
         primer=null;
     }
-    // metodo que agrega un nodo al siguiente (normal) o una concatenacion
+    //Metodo que agrega un nodo al siguiente o una concatenacion
     public Nodo Agregar(char let, int opcion){
 
         Nodo nuevo=new Nodo();
@@ -66,9 +66,7 @@ public class AFND {
         return nuevo;
     }
 
-    
-    
-    //Metodo agregar en uno especifico  con un nodo inicial y final definidos  crear2(poscion, mensaje)
+    //Metodo agregar en uno especifico con un nodo inicial y final definidos
     public void Agregar2(char let,Nodo Nodo_i,Nodo Nodo_f,int num){
         //siendo la opcion uno para juntar al final y la opcion 2 es para bucles
         if(num==1){  
@@ -82,6 +80,7 @@ public class AFND {
 
     }
 
+    //Metodo para añadir el nodo final
     public Nodo agregar_fin(int opcion){
 
         Nodo nuevo = new Nodo();
@@ -104,8 +103,7 @@ public class AFND {
         
     }
 
-    // otro que tenga la opcion 2 salidad para cuando disyuncion 
-
+    //Metodo que agregqa un afnd al final 
    public Nodo fusion_salida_1(AFND nodos, int opcion){
         if(opcion==1){
             if(primer==null){
@@ -138,6 +136,7 @@ public class AFND {
         
     }
 
+    //Metodo que agrega un nodo al final
     public void Agregar_nodo(Nodo nodo){
 
         if(nodo==null){
@@ -151,8 +150,8 @@ public class AFND {
         }
     }
 
-
-     public ArrayList<Nodo> getFinales() {
+    //Metodo que devuelve un final
+    public ArrayList<Nodo> getFinales() {
         ArrayList<Nodo> finales = new ArrayList<>();
         if (primer == null) return finales;
 
@@ -181,7 +180,8 @@ public class AFND {
         return finales;
     }
 
-     public void imprimir() {
+    //Metodo que imprime el afnd para verificar las traslaciones
+    public void imprimir() {
 
         if (primer == null) {
             System.out.println("AFND vacío.");
@@ -240,11 +240,11 @@ public class AFND {
         System.out.println("======================================");
     }
     
-
-    public void imprimirFormal() {
+    // Metodo que formaliza un AFND
+    public List<String> imprimirFormal() {
     if (primer == null) {
         System.out.println("AFND vacío.");
-        return;
+        return null;
     }
 
     List<Nodo> nodos = new ArrayList<>();
@@ -335,8 +335,9 @@ public class AFND {
     System.out.println("Delta=" + Delta);
     System.out.println("s=" + s);
     System.out.println("F=" + F);
+    return sigma;
 }
 
-
+    
     
 }

@@ -1,7 +1,9 @@
 import java.util.ArrayList;
 
+//Clase que realizara las concatenaciones
 public class Cocate {
 
+    //Metodo que crea una concatenacion apartir de 2 afnd
     public AFND crear(AFND afnd1, AFND afnd2) {
         AFND resultado = new AFND();
 

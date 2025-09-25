@@ -1,5 +1,5 @@
 import java.util.ArrayList;
-
+//Clase que creara las clausuras de klene apartir de un AFND
 public class Klene {
 
     public AFND crear(AFND afnd) {
@@ -13,12 +13,12 @@ public class Klene {
         fin.mensaje = 'f';
         fin.mensaje2 = 'f';
 
-        // conectar inicio a la subexpresion y al fin (0 repeticiones)
+        //Conectar inicio a la subexpresion y al fin (0 repeticiones)
         inicio.nodo_sig1 = afnd.primer;
         inicio.nodo_sig2 = fin;
 
-        // conectar TODOS los finales de la subexpresion al inicio (repetir)
-        // y también al final común
+        //Conectar TODOS los finales de la subexpresion al inicio (repetir)
+        //y también al final común
         ArrayList<Nodo> finales = afnd.getFinales();
         for (Nodo f : finales) {
             if (f.mensaje == 'f') f.mensaje = '-';

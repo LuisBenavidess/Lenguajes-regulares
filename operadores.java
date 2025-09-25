@@ -1,6 +1,8 @@
-import java.net.Socket;
+
 import java.util.ArrayList;
 // Clase que hara todo
+
+//Clase que revisara los ER y realizara las llamadas a las clases de klne, disyuncion, concatenacion
 public class operadores {
 
     //Atributos
@@ -8,7 +10,7 @@ public class operadores {
     public ArrayList<AFND> traslaciones; //cambiar a clase nodo
     public int can_estados;
 
-    //Constructos 
+    //Constructor 
     public operadores(){
         letras= new ArrayList<>();
         traslaciones= new ArrayList<>(); // cambiar clase nodo
@@ -16,12 +18,13 @@ public class operadores {
     }
 
     //Metodos
+
+    //Metodo que obtiene las letras
     public void get_letras(){
         System.out.println(letras);
     }
 
-
-
+    //Metodo que revisa el ER y revisa caracter por caracter para convertirlo a AFND
     public AFND mapeo(String ER) {
         ER = ER.trim();
         
@@ -29,7 +32,7 @@ public class operadores {
 
         int balance = 0;
 
-        // 1. Buscar disyunciones '|' fuera de paréntesis
+        // Buscar disyunciones '|' fuera de paréntesis
         for (int i = 0; i < ER.length(); i++) {
             
             char c = ER.charAt(i);
@@ -45,7 +48,7 @@ public class operadores {
             }
         }
 
-        // 2. Eliminar paréntesis externos si cubren toda la expresión
+        // Eliminar paréntesis externos si cubren toda la expresión
         if (ER.startsWith("(") && ER.endsWith(")")) {
 
             int balanceCheck = 0;
@@ -62,7 +65,7 @@ public class operadores {
             if (externo) return mapeo(ER.substring(1, ER.length() - 1));
         }
 
-        // 3. Buscar concatenaciones '.' fuera de paréntesis
+        // Buscar concatenaciones '.' fuera de paréntesis
         balance = 0;
         for (int i = 0; i < ER.length(); i++) {
             char c = ER.charAt(i);
@@ -78,7 +81,7 @@ public class operadores {
             }
         }
 
-        // 4. Aplicar Kleene '*' al final
+        // Aplicar Kleene '*' al final
         if (ER.endsWith("*")) {
             
             String sub = ER.substring(0, ER.length() - 1);
@@ -90,15 +93,14 @@ public class operadores {
             return kle.crear(afndSub);
         }
 
-        // 5. Caso base: un solo carácter
+        // Caso base: un solo carácter
         AFND resultado = new AFND();
         Nodo n = resultado.Agregar(ER.charAt(0), 1);
         resultado.agregar_fin(1);
         return resultado;
     }
 
-
-
+    //Metodo que separa por partes cada ER 
     public ArrayList<String> separador(String ER, int i,char operacion){
         
         String izquierdo;
@@ -135,6 +137,7 @@ public class operadores {
         return palabras;
     }
 
+    //Metodo que separa las parentesis de un String
     public String parentesis(String ER){
         int inicio = ER.indexOf('(');
         int balance = 1;
@@ -155,7 +158,7 @@ public class operadores {
     }
 
 
-    
+    //Metodo que llama la concatenacion
     public AFND concatenacion(AFND ER,AFND ER2){
         AFND fin= new AFND();
         Cocate concatenacion= new Cocate();
@@ -164,9 +167,7 @@ public class operadores {
         return fin;
     }
             
-
-   
-
+    //Metodo que llama la disyuncion
     public AFND disyun(AFND ER,AFND ER2){
         // falta un metodo para asegurarse de que una disyuncion que no tenga paretesis :)tu puedes luis del futuro y martin del futuro
         // hacer un mapeo de todo y buscar parentesis y todo lo que este dentro no se pesca :)
